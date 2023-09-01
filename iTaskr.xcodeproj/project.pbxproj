@@ -13,6 +13,8 @@
 		F5A36CEA2A9FD9FC00163B73 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5A36CE92A9FD9FC00163B73 /* Preview Assets.xcassets */; };
 		F5A36CF22A9FDA3800163B73 /* iTaskr.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F5A36CF02A9FDA3800163B73 /* iTaskr.xcdatamodeld */; };
 		F5A36CF42A9FDC2700163B73 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A36CF32A9FDC2700163B73 /* DataController.swift */; };
+		F5A36CF82A9FDF6100163B73 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A36CF72A9FDF6100163B73 /* AddTaskView.swift */; };
+		F5A36CFE2AA1428900163B73 /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A36CFD2AA1428900163B73 /* TaskView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +25,8 @@
 		F5A36CE92A9FD9FC00163B73 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F5A36CF12A9FDA3800163B73 /* iTaskr.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = iTaskr.xcdatamodel; sourceTree = "<group>"; };
 		F5A36CF32A9FDC2700163B73 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		F5A36CF72A9FDF6100163B73 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
+		F5A36CFD2AA1428900163B73 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +61,8 @@
 			children = (
 				F5A36CE22A9FD9FB00163B73 /* iTaskrApp.swift */,
 				F5A36CE42A9FD9FB00163B73 /* ContentView.swift */,
+				F5A36CFD2AA1428900163B73 /* TaskView.swift */,
+				F5A36CF72A9FDF6100163B73 /* AddTaskView.swift */,
 				F5A36CF02A9FDA3800163B73 /* iTaskr.xcdatamodeld */,
 				F5A36CF32A9FDC2700163B73 /* DataController.swift */,
 				F5A36CE62A9FD9FC00163B73 /* Assets.xcassets */,
@@ -144,7 +150,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5A36CF22A9FDA3800163B73 /* iTaskr.xcdatamodeld in Sources */,
+				F5A36CF82A9FDF6100163B73 /* AddTaskView.swift in Sources */,
 				F5A36CF42A9FDC2700163B73 /* DataController.swift in Sources */,
+				F5A36CFE2AA1428900163B73 /* TaskView.swift in Sources */,
 				F5A36CE52A9FD9FB00163B73 /* ContentView.swift in Sources */,
 				F5A36CE32A9FD9FB00163B73 /* iTaskrApp.swift in Sources */,
 			);
