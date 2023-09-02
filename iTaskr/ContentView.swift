@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var moc
-    @FetchRequest(sortDescriptors: []) var tasks: FetchedResults<Task>
+    @FetchRequest(sortDescriptors: [
+        SortDescriptor(\.displayPriority)
+    ]) var tasks: FetchedResults<Task>
     
     @State private var showingAddScreen = false
     
@@ -27,6 +29,37 @@ struct ContentView: View {
         
         try? moc.save()
     }
+    
+    func moveItem(at sets: IndexSet, destination: Int) {
+        let itemToMove = sets.first!
+        
+        if itemToMove < destination {
+            var startIndex = itemToMove + 1
+            let endIndex = destination - 1
+            var startOrder = tasks[itemToMove].displayPriority
+            while startIndex <= endIndex {
+                tasks[startIndex].displayPriority = startOrder
+                startOrder = startOrder + 1
+                startIndex = startIndex + 1
+            }
+            tasks[itemToMove].displayPriority = startOrder
+        }
+        else if destination < itemToMove {
+            var startIndex = destination
+            let endIndex = itemToMove - 1
+            var startOrder = tasks[destination].displayPriority + 1
+            let newOrder = tasks[destination].displayPriority
+            while startIndex <= endIndex {
+                tasks[startIndex].displayPriority = startOrder
+                startOrder = startOrder + 1
+                startIndex = startIndex + 1
+            }
+            tasks[itemToMove].displayPriority = newOrder
+        }
+        
+        try? moc.save()
+    }
+    
     var body: some View {
         NavigationView {
             List {
@@ -43,12 +76,14 @@ struct ContentView: View {
                                         .font(.headline)
                                     Text("\(hours)h \(minutes)m")
                                         .font(.subheadline)
+                                    Text("\(task.displayPriority)")
                                 }
                             }
                         }
                     
                     }
                 }
+                .onMove(perform: moveItem)
                 .onDelete(perform: deleteTasks)
             }
                 .navigationTitle("iTaskr")
@@ -65,7 +100,7 @@ struct ContentView: View {
                     }
                 }
                 .sheet(isPresented: $showingAddScreen){
-                    AddTaskView()
+                    AddTaskView(taskCount: tasks.count)
                 }
         }
         

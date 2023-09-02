@@ -23,6 +23,8 @@ struct AddTaskView: View {
     @State private var durationHours = 1
     @State private var durationMinutes = 0
     
+    let taskCount: Int
+    
     let hoursRange = 0...8
     let minutesRange = 0...59
     
@@ -69,7 +71,7 @@ struct AddTaskView: View {
                     newTask.name = name
                     newTask.duration = setTime
                     newTask.timeRemaining = setTime
-                    
+                    newTask.displayPriority = Int16(taskCount)
                     try? moc.save()
                 }
             }
@@ -86,6 +88,6 @@ struct AddTaskView: View {
 
 struct AddTaskView_Previews: PreviewProvider {
     static var previews: some View {
-        AddTaskView()
+        AddTaskView(taskCount: 5)
     }
 }
