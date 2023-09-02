@@ -22,12 +22,14 @@ struct ContentView: View {
     }
     
     func deleteTasks(at offsets: IndexSet) {
-        for offset in offsets {
-            let task = tasks[offset]
-            moc.delete(task)
+        withAnimation{
+            for offset in offsets {
+                let task = tasks[offset]
+                moc.delete(task)
+            }
+            
+            try? moc.save()
         }
-        
-        try? moc.save()
     }
     
     func moveItem(at sets: IndexSet, destination: Int) {
@@ -56,8 +58,12 @@ struct ContentView: View {
             }
             tasks[itemToMove].displayPriority = newOrder
         }
-        
-        try? moc.save()
+        do {
+            try moc.save()
+        }
+        catch {
+            print(error.localizedDescription)
+        }
     }
     
     var body: some View {
@@ -67,21 +73,22 @@ struct ContentView: View {
                     if let taskName = task.name {
                         let totalDurationInSeconds = Int(task.duration)
                         let (hours, minutes) = hoursAndMinutes(from: totalDurationInSeconds)
-                        Section {
+                        
                             NavigationLink {
                                 TaskView(task: task)
                             } label: {
                                 VStack(alignment: .leading) {
                                     Text(taskName)
-                                        .font(.headline)
+                                        .font(.title)
                                     Text("\(hours)h \(minutes)m")
                                         .font(.subheadline)
                                     Text("\(task.displayPriority)")
+                                        .font(.caption)
                                 }
                             }
+                        
                         }
-                    
-                    }
+
                 }
                 .onMove(perform: moveItem)
                 .onDelete(perform: deleteTasks)

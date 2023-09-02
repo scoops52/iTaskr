@@ -4,7 +4,7 @@
 //
 //  Created by Sean Cooper on 8/30/23.
 //
-
+import CoreData
 import SwiftUI
 
 class TimerViewModel: ObservableObject {
@@ -17,6 +17,9 @@ class TimerViewModel: ObservableObject {
 
 struct AddTaskView: View {
     @Environment(\.managedObjectContext) var moc
+    @Environment(\.dismiss) var dismiss
+    @FetchRequest(sortDescriptors: []) private var tasks: FetchedResults<Task>
+
     @StateObject private var model = TimerViewModel()
     
     @State private var name = ""
@@ -27,6 +30,17 @@ struct AddTaskView: View {
     
     let hoursRange = 0...8
     let minutesRange = 0...59
+    
+    private func saveTask() {
+        let setTime = Int16((durationHours * 3600) + (durationMinutes * 60))
+        let newTask = Task(context: moc)
+        newTask.id = UUID()
+        newTask.name = name
+        newTask.duration = setTime
+        newTask.timeRemaining = setTime
+        newTask.displayPriority = (tasks.last?.displayPriority ?? 0) + 1
+        try? moc.save()
+    }
     
     var body: some View {
         
@@ -39,7 +53,7 @@ struct AddTaskView: View {
             }
             
             Section {
-               Text("Task Duration")
+                Text("Task Duration")
                     .font(.headline)
                 
                 HStack {
@@ -64,25 +78,25 @@ struct AddTaskView: View {
             }
             
             Section {
-                Button("Save") {
-                    let setTime = Int16((durationHours * 3600) + (durationMinutes * 60))
-                    let newTask = Task(context: moc)
-                    newTask.id = UUID()
-                    newTask.name = name
-                    newTask.duration = setTime
-                    newTask.timeRemaining = setTime
-                    newTask.displayPriority = Int16(taskCount)
-                    try? moc.save()
+                Button(action: {
+                    saveTask()
+                    dismiss()
+                }) {
+                    HStack {
+                        Image(systemName:"plus.circle.fill")
+                        Text("Add Task")
+                    }
                 }
             }
             
             
             
         }
+    }
         
         
     }
-}
+
     
 
 
