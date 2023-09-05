@@ -12,7 +12,7 @@ struct ContentView: View {
     @FetchRequest(sortDescriptors: [
         SortDescriptor(\.displayPriority)
     ]) var tasks: FetchedResults<Task>
-    
+    @EnvironmentObject var timerModel: TimerModel
     @State private var showingAddScreen = false
     
     func hoursAndMinutes(from totalSeconds: Int) -> (hours: Int, minutes: Int) {
@@ -76,24 +76,35 @@ struct ContentView: View {
                         
                             NavigationLink {
                                 TaskView(task: task)
+//                                TimerView()
+                                    .environmentObject(timerModel)
                             } label: {
                                 VStack(alignment: .leading) {
                                     Text(taskName)
                                         .font(.title)
-                                    Text("\(hours)h \(minutes)m")
+                                        .foregroundColor(Color.purple)
+                                    Text("\(hours > 0 ? "\(hours) \(hours == 1 ? "hour" : "hours")" : "") \(minutes > 0 ? "\(minutes) \(minutes == 1 ? "minute" : "minutes")" : "")")
                                         .font(.subheadline)
-                                    Text("\(task.displayPriority)")
-                                        .font(.caption)
+                                        .foregroundColor(Color.cyan)
+                                    
                                 }
                             }
+                            .listRowBackground(Color.clear)
+                            .padding()
+                          
+                       
+                            
                         
                         }
+                        
 
                 }
                 .onMove(perform: moveItem)
                 .onDelete(perform: deleteTasks)
             }
-                .navigationTitle("iTaskr")
+            
+                .navigationTitle("Tasks")
+                
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         EditButton()
@@ -106,6 +117,9 @@ struct ContentView: View {
                         }
                     }
                 }
+                .accentColor(.teal) // Set the accent color for buttons and interactive elements
+                            .foregroundColor(.indigo) // Set the default text color
+                            .background(Color.gray.opacity(0.1))
                 .sheet(isPresented: $showingAddScreen){
                     AddTaskView(taskCount: tasks.count)
                 }

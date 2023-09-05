@@ -25,6 +25,7 @@ struct AddTaskView: View {
     @State private var name = ""
     @State private var durationHours = 1
     @State private var durationMinutes = 0
+    @FocusState private var nameIsFocused: Bool
     
     let taskCount: Int
     
@@ -37,9 +38,11 @@ struct AddTaskView: View {
         newTask.id = UUID()
         newTask.name = name
         newTask.duration = setTime
+        newTask.elapsedTime = 0
         newTask.timeRemaining = setTime
         newTask.displayPriority = (tasks.last?.displayPriority ?? 0) + 1
         try? moc.save()
+        print("Task duration: \(newTask.duration)")
     }
     
     var body: some View {
@@ -50,6 +53,7 @@ struct AddTaskView: View {
                     .font(.headline)
                 
                 TextField("Name", text: $name)
+                    .focused($nameIsFocused)
             }
             
             Section {
@@ -92,7 +96,19 @@ struct AddTaskView: View {
             
             
         }
-    }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    nameIsFocused = false
+                }
+            }
+        }
+        .accentColor(.teal) // Set the accent color for buttons and interactive elements
+        .foregroundColor(.indigo) // Set the default text color
+        .background(Color.gray.opacity(0.1))
+    
+        }
         
         
     }

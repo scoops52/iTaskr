@@ -15,6 +15,8 @@
 		F5A36CF42A9FDC2700163B73 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A36CF32A9FDC2700163B73 /* DataController.swift */; };
 		F5A36CF82A9FDF6100163B73 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A36CF72A9FDF6100163B73 /* AddTaskView.swift */; };
 		F5A36CFE2AA1428900163B73 /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A36CFD2AA1428900163B73 /* TaskView.swift */; };
+		F5A36D002AA4323B00163B73 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A36CFF2AA4323B00163B73 /* TimerView.swift */; };
+		F5A36D062AA4ED3800163B73 /* TimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A36D052AA4ED3800163B73 /* TimerModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +29,8 @@
 		F5A36CF32A9FDC2700163B73 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		F5A36CF72A9FDF6100163B73 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 		F5A36CFD2AA1428900163B73 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
+		F5A36CFF2AA4323B00163B73 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		F5A36D052AA4ED3800163B73 /* TimerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,10 +63,10 @@
 		F5A36CE12A9FD9FB00163B73 /* iTaskr */ = {
 			isa = PBXGroup;
 			children = (
+				F5A36D022AA4ECE700163B73 /* ViewModel */,
+				F5A36D012AA4ECCB00163B73 /* View */,
 				F5A36CE22A9FD9FB00163B73 /* iTaskrApp.swift */,
 				F5A36CE42A9FD9FB00163B73 /* ContentView.swift */,
-				F5A36CFD2AA1428900163B73 /* TaskView.swift */,
-				F5A36CF72A9FDF6100163B73 /* AddTaskView.swift */,
 				F5A36CF02A9FDA3800163B73 /* iTaskr.xcdatamodeld */,
 				F5A36CF32A9FDC2700163B73 /* DataController.swift */,
 				F5A36CE62A9FD9FC00163B73 /* Assets.xcassets */,
@@ -77,6 +81,24 @@
 				F5A36CE92A9FD9FC00163B73 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F5A36D012AA4ECCB00163B73 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F5A36CFD2AA1428900163B73 /* TaskView.swift */,
+				F5A36CFF2AA4323B00163B73 /* TimerView.swift */,
+				F5A36CF72A9FDF6100163B73 /* AddTaskView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F5A36D022AA4ECE700163B73 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F5A36D052AA4ED3800163B73 /* TimerModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,10 +171,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5A36D002AA4323B00163B73 /* TimerView.swift in Sources */,
 				F5A36CF22A9FDA3800163B73 /* iTaskr.xcdatamodeld in Sources */,
 				F5A36CF82A9FDF6100163B73 /* AddTaskView.swift in Sources */,
 				F5A36CF42A9FDC2700163B73 /* DataController.swift in Sources */,
 				F5A36CFE2AA1428900163B73 /* TaskView.swift in Sources */,
+				F5A36D062AA4ED3800163B73 /* TimerModel.swift in Sources */,
 				F5A36CE52A9FD9FB00163B73 /* ContentView.swift in Sources */,
 				F5A36CE32A9FD9FB00163B73 /* iTaskrApp.swift in Sources */,
 			);
