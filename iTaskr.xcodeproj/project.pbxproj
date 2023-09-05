@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F56613E62AA7AC8400AE3745 /* EditTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56613E52AA7AC8400AE3745 /* EditTaskView.swift */; };
 		F5A36CE32A9FD9FB00163B73 /* iTaskrApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A36CE22A9FD9FB00163B73 /* iTaskrApp.swift */; };
 		F5A36CE52A9FD9FB00163B73 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A36CE42A9FD9FB00163B73 /* ContentView.swift */; };
 		F5A36CE72A9FD9FC00163B73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5A36CE62A9FD9FC00163B73 /* Assets.xcassets */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F56613E52AA7AC8400AE3745 /* EditTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskView.swift; sourceTree = "<group>"; };
 		F5A36CDF2A9FD9FB00163B73 /* iTaskr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iTaskr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5A36CE22A9FD9FB00163B73 /* iTaskrApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iTaskrApp.swift; sourceTree = "<group>"; };
 		F5A36CE42A9FD9FB00163B73 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 				F5A36CFD2AA1428900163B73 /* TaskView.swift */,
 				F5A36CFF2AA4323B00163B73 /* TimerView.swift */,
 				F5A36CF72A9FDF6100163B73 /* AddTaskView.swift */,
+				F56613E52AA7AC8400AE3745 /* EditTaskView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -171,6 +174,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F56613E62AA7AC8400AE3745 /* EditTaskView.swift in Sources */,
 				F5A36D002AA4323B00163B73 /* TimerView.swift in Sources */,
 				F5A36CF22A9FDA3800163B73 /* iTaskr.xcdatamodeld in Sources */,
 				F5A36CF82A9FDF6100163B73 /* AddTaskView.swift in Sources */,

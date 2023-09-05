@@ -66,36 +66,61 @@ struct ContentView: View {
         }
     }
     
+    private func priorityColor(for priority: Int16) -> Color {
+        switch priority {
+        case 1:
+            return Color.red
+        case 2:
+            return Color.yellow
+        default:
+            return Color.green
+        }
+    }
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(tasks) { task in
                     if let taskName = task.name {
                         let totalDurationInSeconds = Int(task.duration)
                         let (hours, minutes) = hoursAndMinutes(from: totalDurationInSeconds)
-                        
+                     
                             NavigationLink {
                                 TaskView(task: task)
-//                                TimerView()
+                                //                                TimerView()
                                     .environmentObject(timerModel)
                             } label: {
-                                VStack(alignment: .leading) {
-                                    Text(taskName)
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        Text(taskName)
+                                            .font(.system(size: 22, design: .rounded))
+                                        
+                                            .foregroundColor(.primary)
+                                        Text("\(hours > 0 ? "\(hours) \(hours == 1 ? "hour" : "hours") " : "")\(minutes > 0 ? "\(minutes) \(minutes == 1 ? "minute" : "minutes")" : "")")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        
+                                    }
+                                    Spacer()
+                                    Image(systemName: "envelope")
                                         .font(.title)
-                                        .foregroundColor(Color.purple)
-                                    Text("\(hours > 0 ? "\(hours) \(hours == 1 ? "hour" : "hours")" : "") \(minutes > 0 ? "\(minutes) \(minutes == 1 ? "minute" : "minutes")" : "")")
-                                        .font(.subheadline)
-                                        .foregroundColor(Color.cyan)
-                                    
+                                        .foregroundColor(priorityColor(for: task.priority))
                                 }
-                            }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding()
+                                .background(priorityColor(for: task.priority).opacity(0.3))
+                                .cornerRadius(10)
+                        }
+                            
                             .listRowBackground(Color.clear)
-                            .padding()
+                            .listRowSeparator(.hidden)
+                            
                           
                        
                             
                         
                         }
+                        
                         
 
                 }
@@ -104,6 +129,7 @@ struct ContentView: View {
             }
             
                 .navigationTitle("Tasks")
+                
                 
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -117,11 +143,9 @@ struct ContentView: View {
                         }
                     }
                 }
-                .accentColor(.teal) // Set the accent color for buttons and interactive elements
-                            .foregroundColor(.indigo) // Set the default text color
-                            .background(Color.gray.opacity(0.1))
+                
                 .sheet(isPresented: $showingAddScreen){
-                    AddTaskView(taskCount: tasks.count)
+                    AddTaskView()
                 }
         }
         

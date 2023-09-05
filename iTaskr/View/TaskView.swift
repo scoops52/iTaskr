@@ -16,14 +16,12 @@ struct TaskView: View {
     @State private var finishTime = "--:--"
     @EnvironmentObject var timerModel: TimerModel
     
-    
+    @State private var showingEditScreen = false
     
     @Environment(\.scenePhase) var phase
     @State var lastActiveTimeStamp: Date = Date()
     
-    var timeRemaining: Int16 {
-        return task.duration - task.elapsedTime
-    }
+    
     
     
     
@@ -39,12 +37,12 @@ struct TaskView: View {
         }
     }
     
-        func estimateFinishTime() {
-            let start = Date.now
-            let finish = start.addingTimeInterval(Double(task.timeRemaining))
-            finishTime = finish.formatted(date: .omitted, time: .shortened)
-    
-        }
+    func estimateFinishTime() {
+        let start = Date.now
+        let finish = start.addingTimeInterval(Double(task.timeRemaining))
+        finishTime = finish.formatted(date: .omitted, time: .shortened)
+        
+    }
     
     func deleteTask() {
         moc.delete(task)
@@ -52,22 +50,36 @@ struct TaskView: View {
         presentationMode.wrappedValue.dismiss()
     }
     
+    private var taskColor: Color {
+        switch task.priority {
+        case 1:
+            return Color.red
+        case 2:
+            return Color.yellow
+        default:
+            return Color.green
+        }
+    }
+    
+    
+    
+    
     var body: some View {
         
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 40) {
                 Text(task.name ?? "Task")
-                    .font(.largeTitle)
-                    
-                    .foregroundColor(.teal)
-//                Spacer()
+                    .font(.system(.largeTitle, design: .rounded))
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+                //                Spacer()
                 ZStack {
                     Circle()
-                        .stroke(Color.gray.opacity(0.5), lineWidth: 15)
+                        .stroke(taskColor.opacity(0.3), lineWidth: 15)
                     
                     Circle()
                         .trim(from: 0, to: timerModel.progress )
-                        .stroke(AngularGradient(colors: [Color.cyan, Color.indigo, Color.purple, Color.cyan], center: .center), style: StrokeStyle(lineWidth: 15, lineCap: .round, lineJoin: .round))
+                        .stroke(AngularGradient(colors: [taskColor, taskColor.opacity(0.8), taskColor.opacity(0.3), taskColor.opacity(0.8), taskColor], center: .center), style: StrokeStyle(lineWidth: 15, lineCap: .round, lineJoin: .round))
                         .rotationEffect(.degrees(270))
                         .animation(.linear(duration: 1.0), value: timerModel.progress)
                     VStack(spacing: 5) {
@@ -82,7 +94,7 @@ struct TaskView: View {
                     }
                 }
                 .frame(width: 300, height: 300)
-//                Spacer()
+                //                Spacer()
                 Button {
                     if timerModel.isStarted {
                         timerModel.stopTimer()
@@ -92,85 +104,91 @@ struct TaskView: View {
                         estimateFinishTime()
                     }
                 } label: {
-                    Image(systemName: timerModel.isStarted ? "pause.circle.fill" : "play.circle.fill")
+                    Image(systemName: timerModel.isStarted ? "pause.circle" : "play.circle.fill")
                         .font(.system(size: 50))
-                        .foregroundColor(timerModel.isStarted ? Color.gray : Color.indigo)
-                        .background(timerModel.isStarted ? Color.gray.opacity(0.3) : Color.indigo.opacity(0.3))
+                        .foregroundColor(taskColor)
+                        .background(timerModel.isStarted ? Color.clear : taskColor.opacity(0.3))
                         .clipShape(Circle())
                     
                 }
-//                Spacer()
+                //                Spacer()
+                
+                Button {
+                    timerModel.isFinished = false
+                    task.timeRemaining = task.duration
+                    timerModel.initTimer(taskDuration: task.duration, taskTimeRemaining: task.timeRemaining)
                     
-                    Button("Reset Task") {
-                        timerModel.isFinished = false
-                        task.timeRemaining = task.duration
-                        timerModel.initTimer(taskDuration: task.duration, taskTimeRemaining: task.timeRemaining)
-                        
-                        try? moc.save()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                    .foregroundColor(.cyan)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
-                    .shadow(radius: 2)
-                    
-//                    .padding()
-//                    .background(Color.gray.opacity(0.3))
-//                    .cornerRadius(10)
-//                    .fontWeight(.light)
-
+                    try? moc.save()
+                } label: {
+                    Text("Reset Task")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.teal)
+                //                    .frame(maxWidth: .infinity)
+                //                    .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+                //                    .background(Color.blue) // Set your desired background color
+                //                    .foregroundColor(.white) // Text color
+                //                    .font(.headline) // Text font
+                //                    .cornerRadius(10)
+                //                    .shadow(color: .gray, radius: 3, x: 1, y: 2) // Add a subtle shadow
+                
+                
+                //                    .padding()
+                //                    .background(Color.gray.opacity(0.3))
+                //                    .cornerRadius(10)
+                //                    .fontWeight(.light)
+                
                 
                 Spacer()
-//                Spacer()
-                .onAppear {
-                    timerModel.initTimer(taskDuration: task.duration, taskTimeRemaining: task.timeRemaining)
-
-                }
-                .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
-                    if timerModel.isStarted{
-                        timerModel.updateTimer()
-                        task.timeRemaining = Int16(timerModel.totalSeconds)
-                       
-                        try? moc.save()
+                //                Spacer()
+                    .onAppear {
+                        timerModel.initTimer(taskDuration: task.duration, taskTimeRemaining: task.timeRemaining)
+                        
                     }
-               
-                   
-                }
-                .onChange(of: phase) { newValue in
-                    if timerModel.isStarted{
-                        if newValue == .background {
-                            lastActiveTimeStamp = Date()
-                            timerModel.addNotification()
+                    .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
+                        if timerModel.isStarted{
+                            timerModel.updateTimer()
+                            task.timeRemaining = Int16(timerModel.totalSeconds)
+                            
+                            try? moc.save()
                         }
                         
-                        if newValue == .active{
-                            let currentTimeStampDiff = Date().timeIntervalSince(lastActiveTimeStamp)
-                            UNUserNotificationCenter.current()
-                                .removeAllPendingNotificationRequests()
-                            if task.timeRemaining - Int16(currentTimeStampDiff) <= 0 {
-                                timerModel.isStarted = false
-                                timerModel.totalSeconds = 0
-                                task.timeRemaining = 0
-                                timerModel.isFinished = true
-                                timerModel.progress = 0
-                                timerModel.timerStringValue = "00:00"
-                            } else {
-                                timerModel.totalSeconds -= Int(currentTimeStampDiff)
-                                task.timeRemaining -= Int16(currentTimeStampDiff)
-                                
+                        
+                    }
+                    .onChange(of: phase) { newValue in
+                        if timerModel.isStarted{
+                            if newValue == .background {
+                                lastActiveTimeStamp = Date()
+                                timerModel.addNotification()
+                            }
+                            
+                            if newValue == .active{
+                                let currentTimeStampDiff = Date().timeIntervalSince(lastActiveTimeStamp)
+                                UNUserNotificationCenter.current()
+                                    .removeAllPendingNotificationRequests()
+                                if task.timeRemaining - Int16(currentTimeStampDiff) <= 0 {
+                                    timerModel.isStarted = false
+                                    timerModel.totalSeconds = 0
+                                    task.timeRemaining = 0
+                                    timerModel.isFinished = true
+                                    timerModel.progress = 0
+                                    timerModel.timerStringValue = "00:00"
+                                } else {
+                                    timerModel.totalSeconds -= Int(currentTimeStampDiff)
+                                    task.timeRemaining -= Int16(currentTimeStampDiff)
+                                    
+                                }
                             }
                         }
                     }
-                }
                 
                 
             }
-            
             .font(.headline)
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            .background(Color.gray.opacity(0.3))
+            
             .cornerRadius(12)
             .alert(isPresented: $timerModel.isFinished) {
                 Alert(
@@ -188,25 +206,41 @@ struct TaskView: View {
                     })
                 )
             }
-
+            .background(taskColor.opacity(0.1))
+        
+           
+            
             
             
             
             
             
         }
+        
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(role: .destructive, action: {
-                    deleteTask()
+                    showingEditScreen = true
                 }) {
-                    Text("Delete Task")
-                        .foregroundColor(Color.red)
+                    Text("Edit Task")
+                    
                 }
             }
         }
-        
-    }
-}
     
+        
+        
+        
+        .sheet(isPresented: $showingEditScreen, onDismiss: {
+            timerModel.initTimer(taskDuration: task.duration, taskTimeRemaining: task.timeRemaining)
+           
+        }){
+            EditTaskView(task: task)
+        }
+        
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+}
+
 
