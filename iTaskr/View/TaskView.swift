@@ -19,7 +19,9 @@ struct TaskView: View {
     @State private var showingEditScreen = false
     
     @Environment(\.scenePhase) var phase
-    @State var lastActiveTimeStamp: Date = Date()
+//    @State var lastActiveTimeStamp: Date = Date()
+    @State var lastActiveTimeStamp: Date?
+    @State var isLastActiveTimeStampInitialized = false
     
     
     
@@ -158,13 +160,16 @@ struct TaskView: View {
                     }
                     .onChange(of: phase) { newValue in
                         if timerModel.isStarted{
+                            print(newValue)
                             if newValue == .background {
                                 lastActiveTimeStamp = Date()
+                                print("Time Remaining: ", task.timeRemaining)
+                                isLastActiveTimeStampInitialized = true
                                 timerModel.addNotification()
                             }
-                            
-                            if newValue == .active{
-                                let currentTimeStampDiff = Date().timeIntervalSince(lastActiveTimeStamp)
+                            if newValue == .active && isLastActiveTimeStampInitialized {
+                                let currentTimeStampDiff = Date().timeIntervalSince(lastActiveTimeStamp ?? Date())
+                                isLastActiveTimeStampInitialized = false
                                 UNUserNotificationCenter.current()
                                     .removeAllPendingNotificationRequests()
                                 if task.timeRemaining - Int16(currentTimeStampDiff) <= 0 {
